@@ -2,6 +2,8 @@
 
 $api_output = file_get_contents('http://gtfs-api.ed-groth.com/gtfs-api/routes/by-feed/anaheim-ca-us'); 
 
+header('Content-Type: application/json');
+
 $jsonvar = json_decode($api_output, true);
 
 $route_alignments = Array();
@@ -17,9 +19,16 @@ $properties = array(
 'agency_id' => $value['agency_id'],
 'route_color' => $value['route_color']);
 
+if (is_null($value['shared_arcs_geojson'])) 
+	{$geojson = $value['simple_00004_geojson'];}
+else {$geojson = $value['shared_arcs_geojson'];}
+
+
+$geojson = 
+
 $new_array = array(
 	'type' => 'Feature',
-	'geometry' => $value['simple_n_geojson'],
+	'geometry' => $geojson,
 	'properties' => $properties);
 
 array_push($route_alignments, $new_array);
